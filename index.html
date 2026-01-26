@@ -155,7 +155,7 @@
                 id: 7, 
                 label: "PODCAST", 
                 url: "#",
-                status: "manutenção"
+                status: "construção"
             },
             { 
                 id: 8, 
@@ -164,7 +164,7 @@
             },
             { 
                 id: 9, 
-                label: "2iba em movimento - Correr/Caminhar", 
+                label: "2iba em movimento - 2iba moving", 
                 url: "https://www.instagram.com/2ibamoving/?hl=pt-br" 
             }
         ];
@@ -177,11 +177,11 @@
                 }
             };
 
-            const isManutencao = link.status === "manutenção";
+            const isConstrucao = link.status === "construção";
             
             const baseClasses = "relative flex items-center justify-center w-full py-4 px-6 rounded-2xl font-bold text-base uppercase tracking-wider transition-all duration-300 transform hover:scale-[1.02] active:scale-95 animate-fade-in-up opacity-0 animate-fill-forwards shadow-lg text-center border-2 border-brand-green";
             const styleClasses = "bg-white text-brand-green hover:bg-brand-green hover:text-white";
-            const disabledClasses = isManutencao ? "opacity-60 cursor-not-allowed pointer-events-none" : "cursor-pointer";
+            const disabledClasses = isConstrucao ? "opacity-60 cursor-not-allowed pointer-events-none" : "cursor-pointer";
 
             return (
                 <div className="relative w-full">
@@ -194,9 +194,9 @@
                         onClick={handleAction}
                     >
                         {link.label}
-                        {isManutencao && (
+                        {isConstrucao && (
                             <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[7px] font-bold opacity-70 tracking-tighter">
-                                EM MANUTENÇÃO
+                                EM CONSTRUÇÃO
                             </span>
                         )}
                     </a>
