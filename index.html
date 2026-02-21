@@ -101,6 +101,7 @@
             border-radius: 4px;
         }
     </style>
+<link rel="stylesheet" href="/index.css">
 </head>
 <body>
     <div id="initial-loader">
@@ -136,19 +137,14 @@
                 url: "https://forms.gle/yYzAckRZxvS7gmVg9" 
             },
             { 
-                id: 1, 
-                label: "YOUTUBE", 
-                url: "https://www.youtube.com/c/2aIgrejaBatistadeAreias" 
-            },
-            { 
-                id: 2, 
-                label: "Canal WhatsApp", 
-                url: "https://www.whatsapp.com/channel/0029VaGtOo06BIEZeDmTCx3j?utm_source=ig&utm_medium=social&utm_content=link_in_bio&fbclid=PAZXh0bgNhZW0CMTEAc3J0YwZhcHBfaWQMMjU2MjgxMDQwNTU4AAGnXBC4Hm7UlleTxgfAun_cuqtOcO4XtXOZSv10Fpf8r8_bi4xpgAByU_vYNlA_aem_fVUdOvmVck6Oh1eIzi8SHg" 
-            },
-            { 
                 id: 13, 
                 label: "QUERO ME BATIZAR!", 
                 url: "https://wa.me/5581996763048?text=Olá,%20tudo%20bem%20?%20Quero%20me%20batizar,%20como%20faço%20?" 
+            },
+            { 
+                id: 6, 
+                label: "Dízimo e ofertas", 
+                url: "/dizimos"
             },
             { 
                 id: 10, 
@@ -156,14 +152,18 @@
                 url: "https://maps.app.goo.gl/D6UdhjJzaVzMdDxt5" 
             },
             { 
-                id: 6, 
-                label: "Dízimo e ofertas", 
-                action: "view",
-                viewId: "generosidade"
+                id: 1, 
+                label: "NOSSO CANAL DO YOUTUBE", 
+                url: "https://www.youtube.com/c/2aIgrejaBatistadeAreias" 
+            },
+            { 
+                id: 2, 
+                label: "NOSSO CANAL DO WHATSAPP", 
+                url: "https://www.whatsapp.com/channel/0029VaGtOo06BIEZeDmTCx3j?utm_source=ig&utm_medium=social&utm_content=link_in_bio&fbclid=PAZXh0bgNhZW0CMTEAc3J0YwZhcHBfaWQMMjU2MjgxMDQwNTU4AAGnXBC4Hm7UlleTxgfAun_cuqtOcO4XtXOZSv10Fpf8r8_bi4xpgAByU_vYNlA_aem_fVUdOvmVck6Oh1eIzi8SHg" 
             },
             { 
                 id: 7, 
-                label: "PODCAST", 
+                label: "PODCAST - EM CONSTRUÇÃO", 
                 url: "#",
                 status: "construção"
             },
@@ -176,12 +176,20 @@
                 id: 9, 
                 label: "2iba em movimento - 2iba moving", 
                 url: "https://www.instagram.com/2ibamoving/?hl=pt-br" 
+            },
+            { 
+                id: 15, 
+                label: "2ª Igreja Batista de Areias", 
+                url: "https://www.instagram.com/2iba_areias/" 
             }
         ];
 
         const LinkCard = ({ link, index, onClick }) => {
             const handleAction = (e) => {
-                if (link.action === 'view') {
+                if (link.url && link.url.startsWith('/')) {
+                    e.preventDefault();
+                    onClick(link.url);
+                } else if (link.action === 'view') {
                     e.preventDefault();
                     onClick(link.viewId);
                 }
@@ -220,13 +228,40 @@
             const [copied, setCopied] = useState(false);
 
             useEffect(() => {
+                const handleRouting = () => {
+                    const path = window.location.pathname;
+                    if (path === '/dizimos' || path === '/dizimos/') {
+                        setCurrentView('generosidade');
+                    } else {
+                        setCurrentView('main');
+                    }
+                };
+
+                handleRouting();
                 setLoaded(true);
+                
                 const loader = document.getElementById('initial-loader');
                 if (loader) {
                     loader.style.opacity = '0';
                     setTimeout(() => loader.remove(), 500);
                 }
+
+                window.addEventListener('popstate', handleRouting);
+                return () => window.removeEventListener('popstate', handleRouting);
             }, []);
+
+            const navigateTo = (path) => {
+                if (path.startsWith('/')) {
+                    window.history.pushState({}, '', path);
+                    if (path === '/dizimos') {
+                        setCurrentView('generosidade');
+                    } else {
+                        setCurrentView('main');
+                    }
+                } else {
+                    setCurrentView(path);
+                }
+            };
 
             const handleCopyPix = () => {
                 navigator.clipboard.writeText(CONFIG.cnpj);
@@ -261,7 +296,7 @@
 
                     <div className="w-full space-y-4 px-2">
                         {loaded && LINKS.map((link, i) => (
-                            <LinkCard key={link.id} link={link} index={i} onClick={(id) => setCurrentView(id)} />
+                            <LinkCard key={link.id} link={link} index={i} onClick={(path) => navigateTo(path)} />
                         ))}
                     </div>
                 </>
@@ -270,7 +305,7 @@
             const renderGenerosityView = () => (
                 <div className="w-full animate-fade-in-up">
                     <button 
-                        onClick={() => setCurrentView('main')}
+                        onClick={() => navigateTo('/')}
                         className="mb-8 flex items-center text-brand-green font-bold text-sm uppercase tracking-widest hover:opacity-70 transition-opacity"
                     >
                         <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -334,5 +369,6 @@
         const root = ReactDOM.createRoot(document.getElementById('root'));
         root.render(<App />);
     </script>
+<script type="module" src="/index.tsx"></script>
 </body>
 </html>
