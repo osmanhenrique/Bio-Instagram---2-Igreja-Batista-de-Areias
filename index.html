@@ -122,7 +122,8 @@
             whatsapp: "5581998370066",
             cnpj: "11547361000179",
             formattedCnpj: "11.547.361/0001-79",
-            bankInfo: "Santander - Ag.3757 - C.C 13000045-9"
+            bankInfo: "Santander - Ag.3757 - C.C 13000045-9",
+            pixCopiaECola: "00020126440014br.gov.bcb.pix01141154736100017902042IBA5204000053039865802BR5906IGREJA6008BRASILIA62070503***63046C50"
         };
 
         const LINKS = [
@@ -226,6 +227,7 @@
             const [loaded, setLoaded] = useState(false);
             const [currentView, setCurrentView] = useState('main');
             const [copied, setCopied] = useState(false);
+            const [copiedCopiaCola, setCopiedCopiaCola] = useState(false);
 
             useEffect(() => {
                 const handleRouting = () => {
@@ -270,6 +272,12 @@
                 setTimeout(() => setCopied(false), 2000);
             };
 
+            const handleCopyCopiaCola = () => {
+                navigator.clipboard.writeText(CONFIG.pixCopiaECola);
+                setCopiedCopiaCola(true);
+                setTimeout(() => setCopiedCopiaCola(false), 2000);
+            };
+
             const renderMainView = () => (
                 <>
                     <header className="text-center mb-10 animate-fade-in-down w-full px-2 flex flex-col items-center">
@@ -287,12 +295,6 @@
                         <h1 className="text-2xl font-extrabold tracking-tight mb-1 text-brand-green uppercase leading-tight">
                             {CONFIG.mainTitle}
                         </h1>
-                        <h2 className="text-lg font-bold tracking-tight mb-2 text-brand-green/90 uppercase leading-tight">
-                            {CONFIG.title2}
-                        </h2>
-                        <p className="text-brand-green/70 font-medium text-xs sm:text-sm italic">
-                            {CONFIG.subtitle}
-                        </p>
                     </header>
 
                     <div className="w-full space-y-4 px-2">
@@ -332,11 +334,22 @@
 
                     <button
                         onClick={handleCopyPix}
-                        className="flex flex-col items-center justify-center w-full py-6 px-8 bg-brand-green text-white rounded-2xl font-bold text-lg uppercase tracking-widest shadow-2xl hover:bg-brand-green/90 transition-all transform hover:scale-[1.02] active:scale-95 border-b-4 border-black/20"
+                        className="flex flex-col items-center justify-center w-full py-6 px-8 bg-brand-green text-white rounded-2xl font-bold text-lg uppercase tracking-widest shadow-2xl hover:bg-brand-green/90 transition-all transform hover:scale-[1.02] active:scale-95 border-b-4 border-black/20 mb-4"
                     >
                         <span className="text-2xl mb-1">{CONFIG.cnpj}</span>
                         <span className="text-[10px] opacity-70">
-                            {copied ? "✓ COPIADO! COLE NO SEU BANCO" : "CLIQUE PARA COPIAR"}
+                            {copied ? "✓ COPIADO! COLE NO SEU BANCO" : "CLIQUE PARA COPIAR CNPJ"}
+                        </span>
+                    </button>
+
+                    <button
+                        onClick={handleCopyCopiaCola}
+                        className="flex flex-col items-center justify-center w-full py-4 px-8 bg-white text-brand-green rounded-2xl font-bold text-sm uppercase tracking-widest shadow-lg hover:bg-gray-50 transition-all transform hover:scale-[1.02] active:scale-95 border-2 border-brand-green"
+                    >
+                        <span className="text-[10px] opacity-70 mb-1">PIX COPIA E COLA (CHAVE ALEATÓRIA)</span>
+                        <span className="text-xs truncate w-full px-4">{CONFIG.pixCopiaECola}</span>
+                        <span className="text-[10px] mt-2 font-black">
+                            {copiedCopiaCola ? "✓ CÓDIGO COPIADO!" : "CLIQUE PARA COPIAR CÓDIGO"}
                         </span>
                     </button>
                     
