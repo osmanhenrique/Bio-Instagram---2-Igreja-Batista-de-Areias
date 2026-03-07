@@ -3,27 +3,27 @@ import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
 import SmartFAQ from './components/SmartFAQ';
 
 const CONFIG = {
-    mainTitle: "2ª Igreja Batista de Areias",
-    title2: "Crescendo em Cristo",
+    mainTitle: "2ª IGREJA BATISTA DE AREIAS",
+    title2: "CRESCENDO EM CRISTO",
     subtitle: "Acolhendo e servindo em amor",
-    orgName: "2ª Igreja Batista de Areias",
+    orgName: "2ª IGREJA BATISTA DE AREIAS",
     avatar: "https://i.postimg.cc/Wq41NJhT/logo-2iba.jpg",
     whatsapp: "5581998370066",
     cnpj: "11547361000179",
     formattedCnpj: "11.547.361/0001-79",
-    bankInfo: "Santander - Ag.3757 - C.C 13000045-9",
+    bankInfo: "SANTANDER - AG.3757 - C.C 13000045-9",
     pixCopiaECola: "00020126440014br.gov.bcb.pix01141154736100017902042IBA5204000053039865802BR5906IGREJA6008BRASILIA62070503***63046C50"
 };
 
 const LINKS = [
     { 
         id: 11, 
-        label: "Calendário 2026", 
+        label: "CALENDÁRIO 2026", 
         url: "https://drive.google.com/file/d/1UoQiysgCKP-JDkbWWq8KWCxr6eF6yU1r/view?usp=drivesdk" 
     },
     { 
         id: 12, 
-        label: "Peça sua oração aqui", 
+        label: "PEÇA SUA ORAÇÃO AQUI", 
         url: "https://forms.gle/yYzAckRZxvS7gmVg9" 
     },
     { 
@@ -33,12 +33,12 @@ const LINKS = [
     },
     { 
         id: 6, 
-        label: "Dízimo e ofertas", 
+        label: "DÍZIMO E OFERTAS", 
         url: "/dizimo"
     },
     { 
         id: 10, 
-        label: "Localização", 
+        label: "LOCALIZAÇÃO", 
         url: "https://maps.app.goo.gl/D6UdhjJzaVzMdDxt5" 
     },
     { 
@@ -59,18 +59,24 @@ const LINKS = [
     },
     { 
         id: 8, 
-        label: "Trilho - Juventude 2iba", 
+        label: "TRILHO - JUVENTUDE 2IBA", 
         url: "https://www.instagram.com/trilho2iba/?hl=pt-br" 
     },
     { 
         id: 9, 
-        label: "2iba em movimento - 2iba moving", 
+        label: "2IBA EM MOVIMENTO - 2IBA MOVING", 
         url: "https://www.instagram.com/2ibamoving/?hl=pt-br" 
     },
     { 
         id: 15, 
-        label: "2ª Igreja Batista de Areias", 
+        label: "2ª IGREJA BATISTA DE AREIAS", 
         url: "https://www.instagram.com/2iba_areias/" 
+    },
+    { 
+        id: 16, 
+        label: "BOLETIM DOMINICAL", 
+        url: "#",
+        status: "construção"
     }
 ];
 
@@ -101,12 +107,14 @@ const LinkCard = ({ link, index, onClick }: { link: any, index: number, onClick:
                 style={{ animationDelay: `${(index + 1) * 100}ms` }}
                 onClick={handleAction}
             >
-                {link.label}
-                {isConstrucao && (
-                    <span className="absolute right-6 top-1/2 -translate-y-1/2 text-[8px] font-bold opacity-80 tracking-tight whitespace-nowrap">
-                        EM CONSTRUÇÃO
-                    </span>
-                )}
+                <div className="flex items-center justify-center gap-2">
+                    <span>{link.label}</span>
+                    {isConstrucao && (
+                        <span className="text-[7px] font-black opacity-60 tracking-tighter whitespace-nowrap uppercase">
+                            EM CONSTRUÇÃO
+                        </span>
+                    )}
+                </div>
             </a>
         </div>
     );
@@ -210,21 +218,21 @@ const MainApp: React.FC = () => {
                 <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M15 19l-7-7 7-7" />
                 </svg>
-                Voltar
+                VOLTAR
             </button>
 
             <header className="text-center mb-10">
                 <h2 className="text-3xl font-extrabold text-brand-green uppercase mb-4 tracking-tight">
-                    Dízimo e ofertas
+                    DÍZIMO E OFERTAS
                 </h2>
                 
                 <div className="bg-white/50 border-2 border-brand-green/20 rounded-3xl p-6 mb-8 text-brand-green shadow-inner">
-                    <p className="font-bold text-lg mb-2">Pix/CNPJ: {CONFIG.formattedCnpj}</p>
+                    <p className="font-bold text-lg mb-2">PIX/CNPJ: {CONFIG.formattedCnpj}</p>
                     <p className="text-sm font-medium opacity-80">{CONFIG.bankInfo}</p>
                 </div>
 
                 <p className="text-brand-green/60 text-[10px] font-bold uppercase tracking-[0.2em] mb-4">
-                    Clique no botão abaixo para copiar a chave PIX:
+                    CLIQUE NO BOTÃO ABAIXO PARA COPIAR A CHAVE PIX:
                 </p>
             </header>
 
