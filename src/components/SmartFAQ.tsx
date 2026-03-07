@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Send, Settings, Trash2, Edit2, X, MessageCircle, Lock, Plus, Save, Loader2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { GoogleGenAI } from "@google/genai";
@@ -25,9 +26,10 @@ const INITIAL_FAQ: FAQItem[] = [
 ];
 
 const ADMIN_PASSWORD = '2ib@chat2026';
-const SYSTEM_INSTRUCTION = 'Você é o assistente virtual da 2ª Igreja Batista de Areias (2iba). Responda de forma acolhedora, cristã e objetiva. Se não souber algo, sugira entrar em contato com a secretaria.';
+const SYSTEM_INSTRUCTION = 'Você é o assistente virtual da 2ª Igreja Batista de Areias (2iba). Responda de forma acolhedora, cristã e MUITO objetiva (máximo 2 frases). Se não souber algo, sugira entrar em contato com a secretaria.';
 
-export const SmartFAQ: React.FC<{ isOpen: boolean; setIsOpen: (val: boolean) => void }> = ({ isOpen, setIsOpen }) => {
+export const SmartFAQ: React.FC = () => {
+  const navigate = useNavigate();
   const [isAdminOpen, setIsAdminOpen] = useState(false);
   const [password, setPassword] = useState('');
   const [isAuthorized, setIsAuthorized] = useState(false);
@@ -165,113 +167,104 @@ export const SmartFAQ: React.FC<{ isOpen: boolean; setIsOpen: (val: boolean) => 
   };
 
   return (
-    <div className="fixed inset-0 z-[9999] pointer-events-none font-sans flex items-center justify-center p-4">
-      {/* Chat Window */}
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: 20, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 20, scale: 0.95 }}
-            className="pointer-events-auto w-full max-w-md h-[600px] bg-white rounded-3xl shadow-2xl border border-gray-100 flex flex-col overflow-hidden"
+    <div className="fixed inset-0 bg-brand-bg font-sans flex flex-col h-[100dvh]">
+      {/* Header */}
+      <div className="bg-[#527F46] p-4 sm:p-5 flex items-center justify-between text-white shadow-lg shrink-0">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
+            <MessageCircle size={22} />
+          </div>
+          <div>
+            <h3 className="font-bold tracking-tight leading-none text-base sm:text-lg">Chat 2IBA</h3>
+            <span className="text-[10px] opacity-70 uppercase tracking-widest font-medium">Assistente Virtual</span>
+          </div>
+        </div>
+        <div className="flex items-center gap-2">
+          <button 
+            onClick={() => setIsAdminOpen(true)}
+            className="p-2 hover:bg-white/10 rounded-xl transition-colors opacity-40 hover:opacity-100"
+            title="Configurações"
           >
-            {/* Header */}
-            <div className="bg-[#527F46] p-5 flex items-center justify-between text-white shadow-lg">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
-                  <MessageCircle size={22} />
-                </div>
-                <div>
-                  <h3 className="font-bold tracking-tight leading-none">Chat 2IBA</h3>
-                  <span className="text-[10px] opacity-70 uppercase tracking-widest font-medium">Assistente Virtual</span>
-                </div>
-              </div>
-              <div className="flex items-center gap-2">
-                <button 
-                  onClick={() => setIsAdminOpen(true)}
-                  className="p-2 hover:bg-white/10 rounded-xl transition-colors opacity-40 hover:opacity-100"
-                  title="Configurações"
-                >
-                  <Settings size={18} />
-                </button>
-                <button 
-                  onClick={() => setIsOpen(false)}
-                  className="p-2 hover:bg-white/10 rounded-xl transition-colors"
-                >
-                  <X size={22} />
-                </button>
-              </div>
-            </div>
+            <Settings size={18} />
+          </button>
+          <button 
+            onClick={() => navigate('/')}
+            className="p-2 hover:bg-white/10 rounded-xl transition-colors"
+            title="Voltar"
+          >
+            <X size={22} />
+          </button>
+        </div>
+      </div>
 
-            {/* Messages Area */}
-            <div 
-              ref={scrollRef}
-              className="flex-1 overflow-y-auto p-6 space-y-4 bg-gray-50/50"
-            >
-              {messages.length === 0 && (
-                <div className="text-center py-10 px-6">
-                  <div className="w-16 h-16 bg-brand-green/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <MessageCircle size={32} className="text-brand-green" />
-                  </div>
-                  <h4 className="text-brand-green font-bold mb-2">Bem-vindo à 2IBA!</h4>
-                  <p className="text-gray-400 text-sm">Como podemos ajudar você hoje? Sinta-se à vontade para tirar suas dúvidas.</p>
-                </div>
-              )}
-              {messages.map((msg) => (
-                <motion.div 
-                  initial={{ opacity: 0, x: msg.sender === 'user' ? 10 : -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  key={msg.id}
-                  className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}
-                >
-                  <div className={`max-w-[85%] p-4 rounded-2xl text-sm shadow-sm leading-relaxed ${
-                    msg.sender === 'user' 
-                      ? 'bg-[#527F46] text-white rounded-tr-none' 
-                      : 'bg-white text-gray-700 border border-gray-100 rounded-tl-none'
-                  }`}>
-                    {msg.text}
-                  </div>
-                </motion.div>
-              ))}
-              {isTyping && (
-                <div className="flex justify-start">
-                  <div className="bg-white text-brand-green/70 border border-gray-100 p-4 rounded-2xl rounded-tl-none text-xs font-medium flex items-center gap-2 shadow-sm">
-                    <Loader2 size={14} className="animate-spin" />
-                    Aguarde, a 2iba está respondendo...
-                  </div>
-                </div>
-              )}
+      {/* Messages Area */}
+      <div 
+        ref={scrollRef}
+        className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4 bg-gray-50/50"
+      >
+        {messages.length === 0 && (
+          <div className="text-center py-10 px-6 max-w-md mx-auto">
+            <div className="w-16 h-16 bg-brand-green/10 rounded-full flex items-center justify-center mx-auto mb-4">
+              <MessageCircle size={32} className="text-brand-green" />
             </div>
-
-            {/* Input Area */}
-            <form 
-              onSubmit={handleSendMessage}
-              className="p-5 bg-white border-t border-gray-100 flex gap-3"
-            >
-              <input
-                type="text"
-                value={inputValue}
-                onChange={(e) => setInputValue(e.target.value)}
-                placeholder="Digite sua pergunta..."
-                disabled={isTyping}
-                className="flex-1 bg-gray-100 border-none rounded-2xl px-5 py-3 text-sm focus:ring-2 focus:ring-[#527F46] outline-none disabled:opacity-50 transition-all"
-              />
-              <button 
-                type="submit"
-                disabled={isTyping || !inputValue.trim()}
-                className="w-12 h-12 bg-[#527F46] text-white rounded-2xl flex items-center justify-center hover:bg-[#456b3b] transition-all shadow-lg disabled:opacity-50 disabled:scale-95 active:scale-95"
-              >
-                <Send size={20} />
-              </button>
-            </form>
-          </motion.div>
+            <h4 className="text-brand-green font-bold mb-2">Bem-vindo à 2IBA!</h4>
+            <p className="text-gray-400 text-sm">Como podemos ajudar você hoje? Sinta-se à vontade para tirar suas dúvidas.</p>
+          </div>
         )}
-      </AnimatePresence>
+        {messages.map((msg) => (
+          <motion.div 
+            initial={{ opacity: 0, x: msg.sender === 'user' ? 10 : -10 }}
+            animate={{ opacity: 1, x: 0 }}
+            key={msg.id}
+            className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}
+          >
+            <div className={`max-w-[85%] sm:max-w-[70%] p-4 rounded-2xl text-sm shadow-sm leading-relaxed ${
+              msg.sender === 'user' 
+                ? 'bg-[#527F46] text-white rounded-tr-none' 
+                : 'bg-white text-gray-700 border border-gray-100 rounded-tl-none'
+            }`}>
+              {msg.text}
+            </div>
+          </motion.div>
+        ))}
+        {isTyping && (
+          <div className="flex justify-start">
+            <div className="bg-white text-brand-green/70 border border-gray-100 p-4 rounded-2xl rounded-tl-none text-xs font-medium flex items-center gap-2 shadow-sm">
+              <Loader2 size={14} className="animate-spin" />
+              Aguarde, a 2iba está respondendo...
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Input Area */}
+      <div className="p-4 sm:p-5 bg-white border-t border-gray-100 shrink-0">
+        <form 
+          onSubmit={handleSendMessage}
+          className="max-w-4xl mx-auto flex gap-3"
+        >
+          <input
+            type="text"
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+            placeholder="Digite sua pergunta..."
+            disabled={isTyping}
+            className="flex-1 bg-gray-100 border-none rounded-2xl px-5 py-3 text-sm focus:ring-2 focus:ring-[#527F46] outline-none disabled:opacity-50 transition-all"
+          />
+          <button 
+            type="submit"
+            disabled={isTyping || !inputValue.trim()}
+            className="w-12 h-12 bg-[#527F46] text-white rounded-2xl flex items-center justify-center hover:bg-[#456b3b] transition-all shadow-lg disabled:opacity-50 disabled:scale-95 active:scale-95 shrink-0"
+          >
+            <Send size={20} />
+          </button>
+        </form>
+      </div>
 
       {/* Admin Modal */}
       <AnimatePresence>
         {isAdminOpen && (
-          <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-[10000] pointer-events-auto">
+          <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-[10000]">
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}

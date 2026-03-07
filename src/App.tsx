@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { MessageCircle } from 'lucide-react';
+import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
 import SmartFAQ from './components/SmartFAQ';
 
 const CONFIG = {
@@ -112,12 +112,12 @@ const LinkCard = ({ link, index, onClick }: { link: any, index: number, onClick:
     );
 };
 
-const App: React.FC = () => {
+const MainApp: React.FC = () => {
+    const navigate = useNavigate();
     const [loaded, setLoaded] = useState(false);
     const [currentView, setCurrentView] = useState('main');
     const [copied, setCopied] = useState(false);
     const [copiedCopiaCola, setCopiedCopiaCola] = useState(false);
-    const [isChatOpen, setIsChatOpen] = useState(false);
 
     useEffect(() => {
         const handleRouting = () => {
@@ -193,20 +193,10 @@ const App: React.FC = () => {
                 </p>
             </header>
 
-            <div className="w-full space-y-4 px-2 mb-8">
+            <div className="w-full space-y-4 px-2">
                 {loaded && LINKS.map((link, i) => (
                     <LinkCard key={link.id} link={link} index={i} onClick={(path) => navigateTo(path)} />
                 ))}
-
-                {/* Main Chat Button moved to the end */}
-                <button 
-                    onClick={() => setIsChatOpen(true)}
-                    className="w-full bg-brand-green text-white py-4 px-8 rounded-full font-bold text-base uppercase tracking-wider transition-all duration-300 transform hover:scale-[1.02] active:scale-95 animate-fade-in-up opacity-0 animate-fill-forwards shadow-lg flex items-center justify-center gap-3 border-2 border-brand-green mt-4"
-                    style={{ animationDelay: `${(LINKS.length + 1) * 100}ms` }}
-                >
-                    <MessageCircle size={20} />
-                    Chat 2IBA
-                </button>
             </div>
         </>
     );
@@ -282,8 +272,19 @@ const App: React.FC = () => {
                     </p>
                 </footer>
             </main>
-            <SmartFAQ isOpen={isChatOpen} setIsOpen={setIsChatOpen} />
         </div>
+    );
+};
+
+const App: React.FC = () => {
+    return (
+        <BrowserRouter>
+            <Routes>
+                <Route path="/" element={<MainApp />} />
+                <Route path="/chat2iba" element={<SmartFAQ />} />
+                <Route path="*" element={<MainApp />} />
+            </Routes>
+        </BrowserRouter>
     );
 };
 
