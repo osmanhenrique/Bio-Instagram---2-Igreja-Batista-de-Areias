@@ -77,6 +77,11 @@ const LINKS = [
         label: "BOLETIM DOMINICAL", 
         url: "#",
         status: "construção"
+    },
+    { 
+        id: 17, 
+        label: "PIT STOP 2026", 
+        url: "https://docs.google.com/forms/d/e/1FAIpQLSd2TCZLd-OmgY6z2QDWmdT3AIKNYYAATLbhZO2vqTMB9zTasw/viewform" 
     }
 ];
 
