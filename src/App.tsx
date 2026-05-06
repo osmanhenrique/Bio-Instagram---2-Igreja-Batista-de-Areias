@@ -79,9 +79,9 @@ const LINKS = [
         status: "construção"
     },
     { 
-        id: 17, 
-        label: "PIT STOP 2026", 
-        url: "https://docs.google.com/forms/d/e/1FAIpQLSd2TCZLd-OmgY6z2QDWmdT3AIKNYYAATLbhZO2vqTMB9zTasw/viewform" 
+        id: 18, 
+        label: "CHÁ COM FEMINICES 2026", 
+        url: "https://forms.gle/VvD5ckMKHHJXtCQq9" 
     }
 ];
 
