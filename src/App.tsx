@@ -77,6 +77,11 @@ const LINKS = [
         label: "BOLETIM DOMINICAL", 
         url: "#",
         status: "construção"
+    },
+    { 
+        id: 18, 
+        label: "CHÁ COM FEMINICES 2026", 
+        url: "https://forms.gle/VvD5ckMKHHJXtCQq9" 
     }
 ];
 
