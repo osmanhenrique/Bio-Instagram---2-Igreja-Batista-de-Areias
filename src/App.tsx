@@ -82,6 +82,11 @@ const LINKS = [
         id: 18, 
         label: "CHÁ COM FEMINICES 2026", 
         url: "https://forms.gle/VvD5ckMKHHJXtCQq9" 
+    },
+    {
+        id: 19,
+        label: "LIVRARIA 2IBA",
+        url: "https://www.amazon.com.br/hz/wishlist/ls/IVJHPYG62QWG?ref_=wl_share"
     }
 ];
 
